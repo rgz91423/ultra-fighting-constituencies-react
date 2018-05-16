@@ -2,6 +2,7 @@ import  React, { Component } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import Posts from './Posts';
+import Gallery from './Gallery';
 import Home from './Home'
 import  Ionicons  from 'react-native-vector-icons/Ionicons'
 
@@ -29,7 +30,7 @@ const App = TabNavigator({
       ),
     }),
   },
-  Posts: {
+  Gallery: {
     name: "Gallery",
     description: "Gallery Tab",
     screen: Posts,
