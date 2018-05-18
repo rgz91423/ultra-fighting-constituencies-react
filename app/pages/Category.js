@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, WebView, ScrollView, FlatList, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, WebView, FlatList, Image, Dimensions } from 'react-native';
 import Post from './Post';
 import { WordpressService } from '../services/wordpress.service';
 import * as Config from '../config/config';
 import { Header } from 'react-native-elements';
-import GridView from 'react-native-super-grid';
+import { ImageGallery } from '@nlabs/react-native-image-gallery';
 
 
 // Initialize Firebase
@@ -21,7 +21,7 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 */
 const WIDTH = Dimensions.get('window').width;
 
-export default class GalleryPage extends React.Component {
+export default class Category extends React.Component {
 
     _keyExtractor = (item, index) => item.id;
 
@@ -59,38 +59,50 @@ export default class GalleryPage extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchAllPosts();
+        this.fetchAllCategorues();
     }
 
-    fetchAllPosts() {
-        WordpressService.getGallery(5)
+    fetchAllCategorues() {
+        WordpressService.getCategories(4)
         .then((responseData) => {
             this.setState({
                 isLoading: false,
-                posts: responseData
+                categories: responseData
             })
         })
         .done();
     }
 
-    getThumbnail(item) {
+    getThumbnail(category) {
         try {
-          return item.better_featured_image.media_details.sizes.thumbnail.source_url; 
+          return category.better_featured_image.media_details.sizes.thumbnail.source_url; 
         } catch (e) {
           return undefined;
         }
       }
 
-    renderPost =  item  => {
+    renderPost({ item , idx}) {
 
-        var imgUrl=this.getThumbnail(item);
+        try {
+            var imgUrl = item.better_featured_image.media_details.sizes.thumbnail.source_url; 
+            return (
+            <Image
+                animation={'bounceIn'}
+                duration={500}
+                source={{uri: imgUrl}}
+                style={{
+                    width: WIDTH / 3,
+                    height: WIDTH /3
+                }}
+            />
+            );
+            
+          } catch (e) {
+              var jsonStr = JSON.stringify(item);
+            return (<Text>Tiger</Text>);
+          }
+          
 
-        return (<Image
-            animation={'bounceIn'}
-            duration={500}
-            source={{uri: imgUrl}}
-            style={styles.image}
-        />)
            
     }
 
@@ -103,33 +115,27 @@ export default class GalleryPage extends React.Component {
             <View style={styles.container}>
                 <Header
                     leftComponent={{ icon: 'menu', color: '#fff' }}
-                    centerComponent={{ text: '插圖', style: { color: '#fff' } }}
+                    centerComponent={{ text: '小說連載', style: { color: '#fff' } }}
                     />
                 <Text>Loading...</Text>
             </View>
             )
         } else {
-            const images = this.state.posts.map((post) => ({
-                url: this.getThumbnail(post),
-                id: post.id,
-                title: post.title.rendered,
-                description: post.content.rendered
-              })
-            );
+            
             return (
                 <View style={styles.container}>
                     <Header
                         leftComponent={{ icon: 'menu', color: '#fff' }}
-                        centerComponent={{ text: '插圖', style: { color: '#fff' } }}
+                        centerComponent={{ text: '小說連載', style: { color: '#fff' } }}
                         />
-                        <GridView
-                        itemDimension={styles.image}
-                        spacing={0}
-                        items={this.state.posts}
+                
+                        
+                        <FlatList
+                        keyExtractor={this._keyExtractor}
+                        data={this.state.categories}
                         renderItem={this.renderPost}
                         />
-
-
+                        
                 </View>
                 
             )
@@ -150,21 +156,5 @@ const styles = StyleSheet.create({
       borderColor: '#ccc',
       borderWidth: 1,
       fontSize:20
-  },
-  GridViewBlockStyle: {
- 
-    justifyContent: 'center',
-    flex:1,
-    alignItems: 'center',
-    width: WIDTH / 3,
-    height: WIDTH /3,
-    margin: 5,
-    backgroundColor: '#00BCD4'
-   
-  }, 
-  image: {
-    height: WIDTH /3,
-    margin: 0,
-    flex:1,
   }
 });
