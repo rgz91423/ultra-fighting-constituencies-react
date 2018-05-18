@@ -2,10 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, WebView, FlatList } from 'react-native';
 import Post from './Post';
 import * as firebase from 'firebase';
-
-
-const POST_URL = 'http://35.193.238.241/wp-json/wp/v2/posts';
-
+import { WordpressService } from '../services/wordpress.service';
+import { Header, ListItem } from 'react-native-elements';
 
 // Initialize Firebase
 /*
@@ -23,11 +21,14 @@ export default class Posts extends React.Component {
 
     _keyExtractor = (item, index) => item.id;
 
-    constructor() {
+    
+
+    constructor(categoryId) {
         super();
         this.itemsRef = undefined;//firebaseApp.database().ref('isUpdated');
         this.state = {
             isLoading: true,
+            categoryId: categoryId
         };
     }
 
@@ -60,15 +61,7 @@ export default class Posts extends React.Component {
     }
 
     fetchAllPosts() {
-        fetch(POST_URL,
-            {
-                headers: {
-                  'Cache-Control': 'no-cache',
-                },
-                cache: 'no-store'
-              } 
-        )
-        .then((response) => response.json())
+        WordpressService.getPosts(this.state.categoryId)
         .then((responseData) => {
             this.setState({
                 isLoading: false,
@@ -78,13 +71,13 @@ export default class Posts extends React.Component {
         .done();
     }
 
-    renderPost(post) {
-        return (
-        <View style={styles.card} key={post.id} >
-            <Text>{post.title.rendered}</Text>
-        </View>
-        )
-    }
+    renderPost = ({ item }) => (
+        <ListItem
+          title={item.title.rendered}
+          //subtitle={item.subtitle}
+          //leftAvatar={{ source: { uri: item.avatar_url } }}
+        />
+    )
 
 
     render() {
@@ -93,16 +86,29 @@ export default class Posts extends React.Component {
         if (isLoading) {
             return (
             <View style={styles.container}>
+                <Header
+                    leftComponent={{ icon: 'menu', color: '#fff' }}
+                    centerComponent={{ text: 'MY TITLE', style: { color: '#fff' } }}
+                    />
                 <Text>Loading...</Text>
             </View>
             )
         }
         return (
+           
             <View style={styles.container}>
-                <FlatList
-                    data={this.state.posts} keyExtractor={this._keyExtractor}
-                    renderItem={({item}) => <Text style={styles.card}>{item.title.rendered}</Text>}
-                    />
+                <Header
+                leftComponent={{ icon: 'menu', color: '#fff' }}
+                centerComponent={{ text: 'MY TITLE', style: { color: '#fff' } }}
+                />
+               
+               <FlatList
+                keyExtractor={this._keyExtractor}
+                data={this.state.posts}
+                renderItem={this.renderPost}
+                />
+
+
             </View>
 
             

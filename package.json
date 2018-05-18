@@ -5,7 +5,16 @@
   "author": null,
   "private": true,
   "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "react-native-scripts start",
+    "eject": "react-native-scripts eject",
+    "android": "react-native-scripts android",
+    "ios": "react-native-scripts ios",
+    "test": "jest"
+  },
   "dependencies": {
+    "@expo/vector-icons": "^6.3.1",
+    "@nlabs/react-native-image-gallery": "^1.1.0",
     "axios": "^0.16.2",
     "expo": "^21.0.0",
     "firebase": "^4.5.1",
@@ -15,5 +24,8 @@
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.0.0-beta.13",
     "reactotron-react-native": "^1.12.3"
+  },
+  "devDependencies": {
+    "react-native-scripts": "1.14.0"
   }
 }

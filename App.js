@@ -4,6 +4,6 @@ Reactotron
   .useReactNative() // add all built-in react native plugins
   .connect() // let's connect!
 
-import App from './app/router.js';
+import App from './app/pages/router.js';
 
 export default App;

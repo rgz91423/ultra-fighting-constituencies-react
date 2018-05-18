@@ -2,9 +2,9 @@ import  React, { Component } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import Posts from './Posts';
-import Gallery from './Gallery';
+import GalleryPage from './GalleryPage';
 import Home from './Home'
-import  Ionicons  from 'react-native-vector-icons/Ionicons'
+import { Icon } from 'react-native-elements';
 
 
 const App = TabNavigator({
@@ -15,7 +15,7 @@ const App = TabNavigator({
     navigationOptions: ({navigation}) => ({
       tabBarLabel: "主頁",
       tabBarIcon: ({tintColor}) => (
-        <Ionicons name="ios-home-outline" color={tintColor} size={iconSize}  />
+        <Icon name="ios-home-outline" type='ionicon' color={tintColor} size={iconSize}  />
       ),
     })
   },
@@ -26,18 +26,18 @@ const App = TabNavigator({
     navigationOptions: ({navigation}) => ({
       tabBarLabel: "小說",
       tabBarIcon: ({tintColor}) => (
-        <Ionicons name="ios-book-outline" color={tintColor} size={iconSize}  />
+        <Icon name="ios-book-outline" type='ionicon' color={tintColor} size={iconSize}  />
       ),
     }),
   },
-  Gallery: {
-    name: "Gallery",
+  GalleryPage: {
+    name: "GalleryPage",
     description: "Gallery Tab",
-    screen: Posts,
+    screen: GalleryPage,
     navigationOptions: ({navigation}) => ({
       tabBarLabel: "插圖",
       tabBarIcon: ({tintColor}) => (
-        <Ionicons name="ios-images-outline" color={tintColor} size={iconSize} />
+        <Icon name="ios-images-outline" type='ionicon' color={tintColor} size={iconSize} />
       ),
     }),
   },
